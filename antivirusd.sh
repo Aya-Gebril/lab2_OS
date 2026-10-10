@@ -24,10 +24,16 @@ BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
 LAST="$BASE_DIR/directory-info.last"
 NEW="$BASE_DIR/directory-info.new"
 
+WHITELIST="$BASE_DIR/whitelist.txt"
+touch "$WHITELIST"
+
 scan_files() {
     find "$MONITORED_DIR" -maxdepth 1 -type f -print0 |
     while IFS= read -r -d '' file; do
         name="${file##*/}"
+        if grep -Fxq -- "$name" "$WHITELIST"; then
+            continue
+        fi
         case "$name" in
             *.exe|*.bat|*.vbs|*.scr|*.ps1)
                 malicious=true

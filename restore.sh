@@ -60,6 +60,7 @@ while true; do
                 echo "A file with this name already exists."
             elif mv -- "$file" "$MONITORED_DIR/$name"; then
                 echo "Restored $name to $MONITORED_DIR."
+                echo "$name" >> "$(cd "$(dirname "$0")" && pwd)/whitelist.txt"
             fi
             ;;
         2)
