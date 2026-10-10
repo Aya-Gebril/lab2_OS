@@ -119,3 +119,11 @@ make build
 ## Notes
 
 This project uses simple filename and keyword checks to demonstrate antivirus monitoring. These checks do not replace a full antivirus engine and may identify harmless files as suspicious.
+
+## Whitelist
+
+When a quarantined file is restored, its filename is added to `whitelist.txt`. Future scans skip files whose names appear in the whitelist.
+
+The whitelist is stored in the project directory and is created automatically by the antivirus daemon.
+
+**Note:** The whitelist uses filenames, so another file with the same name will also be skipped.
