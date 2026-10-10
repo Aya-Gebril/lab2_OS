@@ -89,6 +89,8 @@ The arguments are:
 
 The daemon scans files initially and then periodically checks for directory changes. When a suspicious file is detected, it is moved to quarantine.
 
+The daemon periodically creates snapshots of the monitored directory using each file's name, size, last modification time, and permissions. It compares the snapshots to detect changes and scans the directory when a difference is found.
+
 Press `Ctrl+C` to stop the daemon.
 
 You can also use:

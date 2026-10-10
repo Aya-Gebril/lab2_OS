@@ -27,6 +27,10 @@ NEW="$BASE_DIR/directory-info.new"
 WHITELIST="$BASE_DIR/whitelist.txt"
 touch "$WHITELIST"
 
+snapshot_dir() {
+    find "$MONITORED_DIR" -maxdepth 1 -type f -printf '%f\t%s\t%T@\t%m\n' | sort
+}
+
 scan_files() {
     find "$MONITORED_DIR" -maxdepth 1 -type f -print0 |
     while IFS= read -r -d '' file; do
@@ -56,16 +60,16 @@ scan_files() {
     done
 }
 
-ls -l "$MONITORED_DIR" > "$LAST"
+snapshot_dir > "$LAST"
 scan_files
-ls -l "$MONITORED_DIR" > "$LAST"
+snapshot_dir > "$LAST"
 
 while true; do
     sleep "$INTERVAL"
-    ls -l "$MONITORED_DIR" > "$NEW"
+    snapshot_dir > "$NEW"
 
     if ! diff -q "$LAST" "$NEW" >/dev/null; then
         scan_files
-        ls -l "$MONITORED_DIR" > "$LAST"
+        snapshot_dir > "$LAST"
     fi
 done
