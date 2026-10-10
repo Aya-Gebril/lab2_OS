@@ -4,13 +4,17 @@
 BASE_DIR="$(cd "$(dirname "$0")" && pwd)"
 MONITORED_DIR="$BASE_DIR/monitored"
 QUARANTINE_DIR="$BASE_DIR/malicious"
+WHITELIST="$BASE_DIR/whitelist.txt"
 
 mkdir -p "$QUARANTINE_DIR"
+touch "$WHITELIST"
 
 find "$MONITORED_DIR" -maxdepth 1 -type f -print0 |
 while IFS= read -r -d '' file; do
     name="${file##*/}"
-
+    if grep -Fxq -- "$name" "$WHITELIST"; then
+        continue
+    fi
     case "$name" in
         *.exe|*.bat|*.vbs|*.scr|*.ps1)
             malicious=true
